@@ -27,7 +27,7 @@ const login_action = createAsyncThunk(
   async (payload: ILoginRequest, { rejectWithValue }) => {
     try {
       const response = (await http.post(api.login, payload)).data;
-      if(!response.success){
+      if (!response.success) {
         return rejectWithValue(response.message);
       }
       const data: ILoginResponse = {

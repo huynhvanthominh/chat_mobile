@@ -1,6 +1,6 @@
-import { Alert, FlatList, NativeScrollEvent, NativeSyntheticEvent, View } from "react-native";
-import { Button, Input, Text } from "../../components";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Alert, FlatList, KeyboardAvoidingView, View } from "react-native";
+import { Button, Icon, Input, Text } from "../../components";
+import { useEffect, useRef, useState } from "react";
 import { style } from "./style";
 import { SIZE, TEXT } from "../../ styles";
 import { Image } from "react-native-elements";
@@ -8,8 +8,6 @@ import { IMessage } from "../../interfaces/message.interface";
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { addMessage_action, getMessage_action } from "../../libs/redux/message/message.action";
 import { useSignalR } from "../../hooks/signalR.hook";
-import { useFocusEffect } from "@react-navigation/native";
-
 interface IItemProps {
     item: IMessage;
     me: boolean;
@@ -51,11 +49,13 @@ export default function Message({ navigation, route }: IMessageProps) {
     const userState = useAppSelector(state => state.auth.user);
     const { on, send, connection } = useSignalR();
     const id = route.params?.id;
+    console.log(route.params);
     const sendOnClick = () => {
         if (!id) {
             Alert.alert("Error", "Please select a user to send message");
             return;
         }
+        if (message.trim() === "") return;
         send("SendMessage", String(id), message);
         setMessage("");
         scrollToEnd();
@@ -88,31 +88,43 @@ export default function Message({ navigation, route }: IMessageProps) {
         scrollToEnd()
     }, [flatListRef])
     return (
-        <View style={
-            [SIZE.W_100,
-            SIZE.H_100
-            ]
-        }>
-            <View>
-                <FlatList
-                    style={{
-                        marginBottom: 100,
-                        paddingBottom: 100
-                    }}
-                    ref={flatListRef}
-                    inverted={true}
-                    data={messageState.find(item => item.id === id)?.messages || []}
-                    keyExtractor={(_, index) => index.toString()}
-                    renderItem={({ item }) => <Item item={item} me={userState?.id === item.userId} />}
-                    onEndReached={() => {
-                        setPage(page + 1);
-                    }}
-                />
+        <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={50}>
+            <View style={
+                [SIZE.W_100,
+                SIZE.H_100
+                ]
+            }>
+                <View>
+
+                    <FlatList
+                        style={{
+                            marginBottom: 100,
+                            paddingBottom: 100
+                        }}
+                        ref={flatListRef}
+                        inverted={true}
+                        data={messageState.find(item => item.id === id)?.messages || []}
+                        keyExtractor={(_, index) => index.toString()}
+                        renderItem={({ item }) => <Item item={item} me={userState?.id === item.userId} />}
+                        onEndReached={() => {
+                            setPage(page + 1);
+                        }}
+                    />
+                </View>
+                <View style={[style.action]}>
+                    <Button type="clear" icon={
+                        <Icon name="paperclip" size={30} />
+                    }></Button>
+                    <Input containerStyle={[style.actionInput]} value={message} onChangeText={e => setMessage(e)}
+                    />
+                    <Button type="clear" icon={
+                        <Icon name="face-laugh" size={30} />
+                    } onPress={() => sendOnClick()}></Button>
+                    <Button type="clear" icon={
+                        <Icon name="paper-plane" size={30} />
+                    } onPress={() => sendOnClick()}></Button>
+                </View>
             </View>
-            <View style={[style.action]}>
-                <Input containerStyle={[style.actionInput]} value={message} onChangeText={e => setMessage(e)}></Input>
-                <Button title="Send" onPress={() => sendOnClick()}></Button>
-            </View>
-        </View>
+        </KeyboardAvoidingView>
     )
 }

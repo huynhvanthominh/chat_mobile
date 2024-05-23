@@ -9,6 +9,7 @@ import Root from './screens/root';
 import Message from './screens/message';
 import { useSignalR } from './hooks/signalR.hook';
 import { useAppSelector } from './libs/redux/hooks';
+import { Button } from './components';
 const Stack = createNativeStackNavigator();
 interface IScreen {
   name: string;
@@ -52,8 +53,13 @@ export default function Index() {
     {
       name: 'Message',
       component: Message,
-      options: {
-      }
+      options: (({ route }: any) => {
+        return ({
+          title: route.params.title,
+          headerRight: route.params?.headerRight,
+          header: route.params?.header
+        })
+      })
     }
   ];
   const authState = useAppSelector(state => state.auth);
