@@ -1,10 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { clearLogin_action, getMe_action, login_action, logout_action } from "./auth.action";
+import { clearGetMe_action, clearLogin_action, clearRegister_action, getMe_action, login_action, logout_action, register_action } from "./auth.action";
 import { setToken } from "../../axios";
 import { ILoginResponse, IRegisterResponse } from "../../../interfaces/auth.interface";
 import { IUser } from "../../../interfaces/user.interface";
 
 export interface AuthState {
+  getMe: {
+    loading: boolean;
+    error?: string | null;
+    payload?: IUser | null;
+  };
   user?: IUser | null;
   token?: string | null;
   refreshToken?: string | null;
@@ -16,11 +21,16 @@ export interface AuthState {
   register: {
     loading: boolean;
     error?: string | null;
-    payload?: IRegisterResponse | null;
+    payload?: IUser | null;
   };
 
 }
 const initialState: AuthState = {
+  getMe: {
+    loading: false,
+    error: null,
+    payload: null,
+  },
   user: null,
   token: null,
   refreshToken: null,
@@ -41,6 +51,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    // login
     builder.addCase(login_action.pending, (state) => {
       state.login.loading = true;
       state.login.error = null;
@@ -61,25 +72,40 @@ const authSlice = createSlice({
       state.login.payload = null;
     });
 
+    // get me
     builder.addCase(getMe_action.pending, (state) => {
-      state.login.loading = true;
-      state.login.error = null;
-      state.login.payload = null;
+      if (!state.getMe) {
+        state.getMe = initialState.getMe;
+      }
+      state.getMe.loading = true;
+      state.getMe.error = null;
+      state.getMe.payload = null;
     });
 
     builder.addCase(getMe_action.fulfilled, (state, action) => {
-      state.login.loading = false;
+      state.getMe.loading = false;
+      state.getMe.payload = action.payload;
       state.user = action.payload;
+      state.getMe.payload = action.payload;
     });
 
     builder.addCase(getMe_action.rejected, (state, action) => {
-      state.login.loading = false;
-      state.login.error = action.payload as string;
-      state.login.payload = null;
-      state.token = null;
+      state.getMe.loading = false;
+      state.getMe.error = action.payload as string;
+      state.getMe.payload = null;
       state.user = null;
+      state.token = null;
+      state.refreshToken = null;
+      setToken("");
+    });
+    // clear get me
+    builder.addCase(clearGetMe_action.fulfilled, (state) => {
+      state.getMe.loading = false;
+      state.getMe.error = null;
+      state.getMe.payload = null;
     });
 
+    // logout
     builder.addCase(logout_action.pending, (state) => {
       state.login.loading = true;
       state.login.error = null;
@@ -100,10 +126,36 @@ const authSlice = createSlice({
       state.login.payload = null;
     });
 
+    // clear login
     builder.addCase(clearLogin_action.fulfilled, (state) => {
       state.login.loading = false;
       state.login.error = null;
       state.login.payload = null;
+    });
+
+    // register
+    builder.addCase(register_action.pending, (state) => {
+      state.register.loading = true;
+      state.register.error = null;
+      state.register.payload = null;
+    });
+
+    builder.addCase(register_action.fulfilled, (state, action) => {
+      state.register.loading = false;
+      state.register.payload = action.payload;
+    });
+
+    builder.addCase(register_action.rejected, (state, action) => {
+      state.register.loading = false;
+      state.register.error = action.payload as string;
+      state.register.payload = null;
+    });
+
+    // clear register
+    builder.addCase(clearRegister_action.fulfilled, (state) => {
+      state.register.loading = false;
+      state.register.error = null;
+      state.register.payload = null;
     });
   }
 });

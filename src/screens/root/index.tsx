@@ -1,8 +1,8 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Friend from "../friend";
+import Friend from "../friends";
 import MessageStack from "../../stacks/messages.stack";
 import Profile from "../profile";
-import { Icon } from "../../components";
+import { Button, Icon } from "../../components";
 import { useAppSelector } from "../../libs/redux/hooks";
 import { Image } from "react-native-elements";
 
@@ -15,6 +15,13 @@ export default function Root() {
         title: "Contact",
         tabBarIcon: () => {
           return <Icon name="id-badge" size={24} />
+        },
+        headerRight: () => {
+          return <Button
+            type="clear"
+            icon={
+              <Icon name="user-plus" size={24} />
+            } />
         }
       }} component={Friend} />
       <Tab.Screen name="messagesStack" options={{
@@ -22,7 +29,7 @@ export default function Root() {
         headerShown: false,
         tabBarIcon: () => {
           return <Icon name="message" size={24} />
-        }
+        },
       }} component={MessageStack} />
       <Tab.Screen name="setting" options={{
         title: "Settings",

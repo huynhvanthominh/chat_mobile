@@ -11,6 +11,7 @@ export interface IRegisterRequest {
   username: string;
   password: string;
   confirmPassword: string;
+  displayName: string;
 }
 
 export interface IRegisterResponse {

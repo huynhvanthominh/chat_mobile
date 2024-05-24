@@ -2,15 +2,19 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   ILoginRequest,
   ILoginResponse,
+  IRegisterRequest,
 } from "../../../interfaces/auth.interface";
 import { getMessageErrorFromApi } from "../../../utils";
 import { http } from "../../axios";
+import { IUser } from "../../../interfaces/user.interface";
 const key = {
   login: "auth/login",
-  reguster: "auth/register",
+  clearLogin: "auth/clearLogin",
+  register: "auth/register",
+  clearRegister: "auth/clearRegister",
   getMe: "auth/getMe",
+  clearGetMe: "auth/clearGetMe",
   logout: "auth/logout",
-  cleatLogin: "auth/clearLogin",
 };
 const api = {
   login: "auth/login",
@@ -18,7 +22,7 @@ const api = {
   getMe: "auth/me",
 };
 
-const clearLogin_action = createAsyncThunk(key.cleatLogin, async () => {
+const clearLogin_action = createAsyncThunk(key.clearLogin, async () => {
   return;
 });
 
@@ -26,15 +30,8 @@ const login_action = createAsyncThunk(
   key.login,
   async (payload: ILoginRequest, { rejectWithValue }) => {
     try {
-      const response = (await http.post(api.login, payload)).data;
-      if (!response.success) {
-        return rejectWithValue(response.message);
-      }
-      const data: ILoginResponse = {
-        token: response.payload.token,
-        refreshToken: response.payload?.refreshToken,
-      };
-      return data;
+      const response: ILoginResponse = (await http.post(api.login, payload)).data;
+      return response;
     } catch (error: any) {
       return rejectWithValue(getMessageErrorFromApi(error));
     }
@@ -42,28 +39,34 @@ const login_action = createAsyncThunk(
 );
 
 const register_action = createAsyncThunk(
-  key.reguster,
-  async (payload: ILoginRequest, { rejectWithValue }) => {
+  key.register,
+  async (payload: IRegisterRequest, { rejectWithValue }) => {
     try {
-      const response = await http.post(api.register, payload);
-      return {};
+      const response: IUser = (await http.post(api.register, payload)).data;
+      return response;
     } catch (error: any) {
       return rejectWithValue(getMessageErrorFromApi(error));
     }
   }
 );
+const clearRegister_action = createAsyncThunk(key.clearRegister, async () => {
+  return;
+})
 
 const getMe_action = createAsyncThunk(
   key.getMe,
   async (_, { rejectWithValue }) => {
     try {
-      const response = await http.get(api.getMe);
-      return response.data;
+      const response: IUser = (await http.get(api.getMe)).data;
+      return response;
     } catch (error: any) {
       return rejectWithValue(getMessageErrorFromApi(error));
     }
   }
 );
+const clearGetMe_action = createAsyncThunk(key.clearGetMe, async () => {
+  return;
+});
 
 const logout_action = createAsyncThunk(
   key.logout,
@@ -79,6 +82,8 @@ export {
   login_action,
   register_action,
   getMe_action,
+  clearGetMe_action,
   logout_action,
   clearLogin_action,
+  clearRegister_action
 };

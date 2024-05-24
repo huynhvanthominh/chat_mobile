@@ -1,30 +1,40 @@
-import {View} from 'react-native';
-import {styles} from './style';
-import {Text} from '../../components';
-import React, {useEffect} from 'react';
+import { Alert, View } from 'react-native';
+import { styles } from './style';
+import { Text } from '../../components';
+import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
-import { getMe_action } from '../../libs/redux/auth/auth.action';
+import { clearGetMe_action, getMe_action } from '../../libs/redux/auth/auth.action';
 import { setToken } from '../../libs/axios';
+import { useLoading } from '../../hooks';
 
 interface IProps {
   navigation: any;
 }
-export default function WelCome({navigation}: IProps): React.JSX.Element {
+export default function WelCome({ navigation }: IProps): React.JSX.Element {
   const dispatch = useAppDispatch();
-  const authState = useAppSelector((state) => state.auth);  
+  const authState = useAppSelector((state) => state.auth);
+  const { setLoading } = useLoading();
   useEffect(() => {
-    if(authState.token){
+    if (authState.token) {
       setToken(authState.token)
       dispatch(getMe_action())
-    }else{
+    } else {
       navigation.navigate('login')
     }
   }, [authState.token])
   useEffect(() => {
-    if(authState.user){
+    setLoading(authState.getMe.loading, 'Getting user...');
+    if (authState.getMe.error) {
+      Alert.alert('Error', authState.getMe.error, [{
+        text: 'OK', onPress: () => {
+          dispatch(clearGetMe_action());
+        }
+      }]);
+    }
+    if (authState.getMe.payload) {
       navigation.navigate('root')
     }
-  }, [authState.user]);
+  }, [authState.getMe])
   return (
     <View style={[styles.container]}>
       <Text h1>Welcome</Text>
