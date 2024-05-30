@@ -1,5 +1,5 @@
-export interface IPaginateQuery{
-
+export interface IPaginateQuery {
+    search?: string,
     page: number,
-    countPerPage: number   
+    countPerPage: number
 }

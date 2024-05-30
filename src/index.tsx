@@ -9,7 +9,8 @@ import Root from './screens/root';
 import Message from './screens/message';
 import { useSignalR } from './hooks/signalR.hook';
 import { useAppSelector } from './libs/redux/hooks';
-import { Button } from './components';
+import AddFriend from './screens/addFriend';
+import { SCREEN } from './constants/screen';
 const Stack = createNativeStackNavigator();
 interface IScreen {
   name: string;
@@ -60,6 +61,13 @@ export default function Index() {
           header: route.params?.header
         })
       })
+    },
+    {
+      name: SCREEN.ADD_FRIEND,
+      component: AddFriend,
+      options: {
+        title: "Add Friend"
+      }
     }
   ];
   const authState = useAppSelector(state => state.auth);

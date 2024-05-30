@@ -77,7 +77,7 @@ export default function Messages({ navigation }: IMessagesProps) {
         onEndReached={() => {
           setPage(page + 1);
         }}
-        refreshing={true}
+        refreshing={messageState.messages.loading}
       />
     </View>
   );

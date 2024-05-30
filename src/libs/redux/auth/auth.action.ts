@@ -72,6 +72,7 @@ const logout_action = createAsyncThunk(
   key.logout,
   async (_, { rejectWithValue }) => {
     try {
+      console.log("logout");
     } catch (error: any) {
       return rejectWithValue(getMessageErrorFromApi(error));
     }

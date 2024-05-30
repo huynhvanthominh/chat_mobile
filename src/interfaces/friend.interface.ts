@@ -4,3 +4,6 @@ export interface IFriend {
     displayName: string;
     messageGroupId: number;
 }
+export interface IAddFriendRequest {
+    userId: number;
+}

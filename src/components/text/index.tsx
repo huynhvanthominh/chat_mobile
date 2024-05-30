@@ -6,25 +6,26 @@ interface IProps extends TextProps {
   h3?: boolean;
   h4?: boolean;
   h5?: boolean;
+  center?: boolean;
 }
-export default function Text({ children, style, ...props }: IProps) {
+export default function Text({ children, style, center, ...props }: IProps) {
   return (
     <T
       {...props}
       style={[
-        TEXT.default,
         {
           fontSize: props.h1
             ? 32
             : props.h2
-            ? 24
-            : props.h3
-            ? 18
-            : props.h4
-            ? 16
-            : props.h5
-            ? 14
-            : 12,
+              ? 24
+              : props.h3
+                ? 18
+                : props.h4
+                  ? 16
+                  : props.h5
+                    ? 14
+                    : TEXT.default.fontSize,
+          textAlign: center ? 'center' : 'left',
         },
         style,
       ]}

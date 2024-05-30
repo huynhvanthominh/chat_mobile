@@ -5,9 +5,17 @@ import Profile from "../profile";
 import { Button, Icon } from "../../components";
 import { useAppSelector } from "../../libs/redux/hooks";
 import { Image } from "react-native-elements";
+import Setting from "../setting";
+import { useEffect } from "react";
+import { Navigation } from "../../interfaces/navigation.interface";
+import { SCREEN } from "../../constants/screen";
 
 const Tab = createBottomTabNavigator();
-export default function Root() {
+interface IProps {
+  navigation: Navigation
+}
+export default function Root({ navigation }: IProps) {
+  
   const userState = useAppSelector(state => state.auth.user);
   return (
     <Tab.Navigator initialRouteName="messageStack">
@@ -19,6 +27,9 @@ export default function Root() {
         headerRight: () => {
           return <Button
             type="clear"
+            onPress={() => {
+              navigation.navigate(SCREEN.ADD_FRIEND)
+            }}
             icon={
               <Icon name="user-plus" size={24} />
             } />
@@ -41,8 +52,22 @@ export default function Root() {
             height: 24,
             borderRadius: 12
           }} />
+        },
+        headerRight: () => {
+          return <Button
+            type="clear"
+            icon={
+              <Icon name="pen" size={24} />
+            } />
+        },
+        headerLeft: () => {
+          return <Button
+            type="clear"
+            icon={
+              <Icon name="qrcode" size={24} />
+            } />
         }
-      }} component={Profile} />
+      }} component={Setting} />
     </Tab.Navigator>
   );
 }

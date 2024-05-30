@@ -3,9 +3,8 @@ import { Alert, View } from 'react-native';
 import { Button, Input, Space, Text } from '../components';
 import { DISPLAY, SIZE } from '../ styles';
 import { useAppDispatch, useAppSelector } from '../libs/redux/hooks';
-import { clearGetMe_action, clearLogin_action, getMe_action, login_action } from '../libs/redux/auth/auth.action';
+import { clearLogin_action, getMe_action, login_action } from '../libs/redux/auth/auth.action';
 import { ILoginRequest } from '../interfaces/auth.interface';
-import { useSignalR } from '../hooks/signalR.hook';
 import { useLoading } from '../hooks';
 
 interface IProps {

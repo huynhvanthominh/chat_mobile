@@ -10,6 +10,9 @@ export const DISPLAY = StyleSheet.create({
   justify_center: {
     justifyContent: 'center',
   },
+  align_center: {
+    alignItems: 'center',
+  },
   hidden: {
     display: 'none',
   },

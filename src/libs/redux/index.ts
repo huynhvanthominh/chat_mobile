@@ -1,14 +1,17 @@
-import { Action, Reducer, combineReducers, configureStore } from "@reduxjs/toolkit";
+import { Reducer, combineReducers, configureStore } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persistReducer, persistStore } from "redux-persist";
-// import logger from 'redux-logger';
 import autoMergeLevel2 from "redux-persist/es/stateReconciler/autoMergeLevel2";
-import { authReudcer } from "./auth/auth.reducer";
-import hardSet from "redux-persist/es/stateReconciler/hardSet";
-import { messageReducer } from "./message/message.reducer";
+import { AuthState, authReudcer } from "./auth/auth.reducer";
+import { MessageState, messageReducer } from "./message/message.reducer";
 import logger from "redux-logger";
-import { contactReducer } from "./contact/contact.reducer";
-const rootReducer = combineReducers({
+import { ContactState, contactReducer } from "./contact/contact.reducer";
+export interface RootState {
+  auth: AuthState;
+  message: MessageState;
+  contact: ContactState;
+}
+const rootReducer: Reducer<RootState> = combineReducers({
   auth: authReudcer,
   message: messageReducer,
   contact: contactReducer,
@@ -16,12 +19,11 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'auth',
   storage: AsyncStorage,
-  stateReconciler: hardSet,
+  stateReconciler: autoMergeLevel2,
   whitelist: ['auth'],
 };
-export type RootState = ReturnType<typeof rootReducer>;
 
-const persistedReducer = persistReducer(persistConfig, rootReducer as Reducer<RootState, Action>);
+const persistedReducer = persistReducer<RootState>(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
@@ -31,6 +33,7 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
-// persistor.purge();
+persistor.purge();
+persistor.persist();
 
 export type AppDispatch = typeof store.dispatch;
