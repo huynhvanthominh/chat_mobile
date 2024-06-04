@@ -1,6 +1,8 @@
 import { AxiosError } from "axios";
 
 export const getMessageErrorFromApi = (error: AxiosError): string => {
+  console.log("Error", error.request);
+
   let message: any = error;
   if (message.response) {
     message = message.response;

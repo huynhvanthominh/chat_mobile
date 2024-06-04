@@ -6,5 +6,6 @@ export interface IUser {
 }
 
 export interface IRecieveRequestAddFriend extends IUser {
+    makeFriendId: number,
     isRead: boolean
 }

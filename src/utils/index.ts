@@ -1,2 +1,2 @@
-import { getMessageErrorFromApi } from "./hanle.api";
+import { getMessageErrorFromApi } from "./handle.api";
 export { getMessageErrorFromApi };

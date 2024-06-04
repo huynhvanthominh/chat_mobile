@@ -1,9 +1,9 @@
 import {View} from 'react-native';
 
 interface IProps {
-  size: number;
+  size?: number;
 }
-export default function Space({size = 1}: IProps): React.JSX.Element {
+export default function Space({size = 9}: IProps): React.JSX.Element {
   return (
     <View
       style={{
