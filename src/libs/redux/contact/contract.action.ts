@@ -4,17 +4,20 @@ import { IPaginate } from "../../../interfaces/paginate.interface";
 import { IPaginateQuery } from "../../../interfaces/query.interface";
 import { getMessageErrorFromApi } from "../../../utils";
 import { IFriend } from "../../../interfaces/friend.interface";
-import { IUser } from "../../../interfaces/user.interface";
+import { IRecieveRequestAddFriend, IUser } from "../../../interfaces/user.interface";
 
 const key = {
     friends: "user/friends",
     searchFriends: "user/searchFriends",
     addFriend: "user/addFriend",
+    receiveMakeFriendRequest: "user/receiveMakeFriendRequest",
+    getReceivedFriendRequest: "user/getReceivedFriendRequest"
 };
 const api = {
     friends: "user/friends",
     searchFriends: "user/search-friends",
     addFriend: "user/add-friend",
+    receiveMakeFriendRequest: "user/receive-make-friend-request",
 };
 
 interface IGetFriendsRequest {
@@ -74,8 +77,41 @@ const addFriend_action = createAsyncThunk(
         }
     }
 );
+
+const addReceivedFriendRequest_action = createAsyncThunk(
+    key.receiveMakeFriendRequest,
+    async (data: IRecieveRequestAddFriend, { rejectWithValue }) => {
+        try {
+            return data;
+        } catch (error: any) {
+            return rejectWithValue(getMessageErrorFromApi(error));
+        }
+    }
+);
+
+interface IGetRecieveRequestAddFriend {
+    paginate: IPaginateQuery;
+}
+const getReceivedFriendRequest_action = createAsyncThunk(
+    key.getReceivedFriendRequest,
+    async ({
+        paginate
+    }: IGetRecieveRequestAddFriend, { rejectWithValue }) => {
+        try {
+
+            const response = await http.get(api.receiveMakeFriendRequest, {
+                params: paginate
+            });
+             return response.data as IPaginate<IRecieveRequestAddFriend>;
+        } catch (error: any) {
+            return rejectWithValue(getMessageErrorFromApi(error));
+        }
+    }
+);
+
 export {
     getFriends_action,
     searchFriends_action,
-    addFriend_action
+    addFriend_action,
+    addReceivedFriendRequest_action
 }

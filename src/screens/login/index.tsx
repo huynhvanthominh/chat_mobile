@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, View } from 'react-native';
-import { Button, Input, Space, Text } from '../components';
-import { DISPLAY, SIZE } from '../ styles';
-import { useAppDispatch, useAppSelector } from '../libs/redux/hooks';
-import { clearLogin_action, getMe_action, login_action } from '../libs/redux/auth/auth.action';
-import { ILoginRequest } from '../interfaces/auth.interface';
-import { useLoading } from '../hooks';
+import { Button, Input, Space, Text } from '../../components';
+import { DISPLAY, SIZE } from '../../ styles';
+import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
+import { clearLogin_action, getMe_action, login_action } from '../../libs/redux/auth/auth.action';
+import { ILoginRequest } from '../../interfaces/auth.interface';
+import { useLoading } from '../../hooks';
 
 interface IProps {
   navigation: any;

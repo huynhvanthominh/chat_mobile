@@ -50,7 +50,7 @@ export default function Friend({ navigation }: IProps) {
     }));
   }, [page]);
   const navigateToAddFriend = () => {
-    navigation.navigate(SCREEN.ADD_FRIEND);
+    navigation.navigate(SCREEN.ADD_FRIEND_SCREEN);
   }
   return (
     <View>

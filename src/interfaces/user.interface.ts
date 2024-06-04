@@ -4,3 +4,7 @@ export interface IUser {
     displayName: string,
     avatar: string,
 }
+
+export interface IRecieveRequestAddFriend extends IUser {
+    isRead: boolean
+}

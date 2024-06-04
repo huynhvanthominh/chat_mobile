@@ -49,7 +49,6 @@ export default function Message({ navigation, route }: IMessageProps) {
     const userState = useAppSelector(state => state.auth.user);
     const { on, send, connection } = useSignalR();
     const id = route.params?.id;
-    console.log(route.params);
     const sendOnClick = () => {
         if (!id) {
             Alert.alert("Error", "Please select a user to send message");
@@ -63,7 +62,6 @@ export default function Message({ navigation, route }: IMessageProps) {
     const scrollToEnd = () => {
         if (!flatListRef) return;
         // flatListRef?.current?.scrollToEnd({ animated: true });
-        console.log("scroll to end")
     }
     useEffect(() => {
         if (connection) {

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "730933918355",
+    "project_id": "chat-eda56",
+    "storage_bucket": "chat-eda56.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:730933918355:android:63b00b7898fae299f42b66",
+        "android_client_info": {
+          "package_name": "com.chat_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPbye0VfFvNK5BUE3MD-vO5wV15ZOcQ5I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

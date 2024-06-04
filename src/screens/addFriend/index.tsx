@@ -74,11 +74,8 @@ export default function AddFriend() {
         } as IAddFriendRequest)
     }
     useEffect(() => {
-        on("ReceiveRequestAddFriend", (data: any) => {
-            console.log(data);
-        })
         on("SendRequestAddFriend", (data: any) => {
-            console.log(data);
+            console.log("SendRequestAddFriend", data);
         })
     }, [])
     return (

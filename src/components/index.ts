@@ -4,4 +4,5 @@ import Button from './button';
 import Space from './space';
 import Icon from './icon';
 import Border from './border';
-export {Text, Input, Button, Space, Icon, Border};
+import Badge from './badge';
+export {Text, Input, Button, Space, Icon, Border, Badge};

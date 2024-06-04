@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
 import { clearGetMe_action, getMe_action } from '../../libs/redux/auth/auth.action';
 import { setToken } from '../../libs/axios';
 import { useLoading, useSignalR } from '../../hooks';
+import { SCREEN } from '../../constants/screen';
 
 interface IProps {
   navigation: any;
@@ -21,7 +22,7 @@ export default function WelCome({ navigation }: IProps): React.JSX.Element {
       dispatch(getMe_action())
     } else {
       stopConnection();
-      navigation.navigate('login')
+      navigation.navigate(SCREEN.LOGIN_SCREEN)
     }
   }, [authState.token])
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function WelCome({ navigation }: IProps): React.JSX.Element {
       }]);
     }
     if (authState.user) {
-      navigation.navigate('root')
+      navigation.navigate(SCREEN.HOME_STACK)
     }
   }, [authState.getMe])
   return (

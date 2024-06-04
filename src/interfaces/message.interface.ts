@@ -6,7 +6,7 @@ export interface IMessages {
 
 export interface IMessage {
     id: number,
-    userId: string,
+    userId: number,
     message: string,
     avatar: string,
     createdAt: string,

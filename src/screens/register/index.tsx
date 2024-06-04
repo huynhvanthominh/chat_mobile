@@ -5,6 +5,7 @@ import { Button, Input, Space, Text } from '../../components';
 import { useLoading } from '../../hooks';
 import { useAppDispatch, useAppSelector } from '../../libs/redux/hooks';
 import { clearRegister_action, register_action } from '../../libs/redux/auth/auth.action';
+import { SCREEN } from '../../constants/screen';
 
 interface IProps {
   navigation: any;
@@ -19,7 +20,7 @@ export default function Regsister({ navigation }: IProps): React.JSX.Element {
   const registerState = useAppSelector((state) => state.auth.register);
   const dispatch = useAppDispatch();
   const loginOnClick = () => {
-    navigation.navigate('login');
+    navigation.navigate(SCREEN.LOGIN_SCREEN);
   }
   const registerOnClick = () => {
     dispatch(register_action({
@@ -42,7 +43,7 @@ export default function Regsister({ navigation }: IProps): React.JSX.Element {
       Alert.alert('Success', 'Register success', [{
         text: 'OK', onPress: () => {
           dispatch(clearRegister_action())
-          navigation.navigate('login');
+          navigation.navigate(SCREEN.LOGIN_SCREEN);
         }
       }]);
     }

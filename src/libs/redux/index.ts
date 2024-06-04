@@ -22,18 +22,23 @@ const persistConfig = {
   stateReconciler: autoMergeLevel2,
   whitelist: ['auth'],
 };
-
+const axiosMiddleware = (store: any) => (next: any) => (action: any) => {
+  try {
+    return next(action);
+  } catch (error) {
+    console.log("error", error);
+  }
+}
 const persistedReducer = persistReducer<RootState>(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false })
-      .concat(),
+      .concat(axiosMiddleware),
 });
 
 export const persistor = persistStore(store);
-persistor.purge();
 persistor.persist();
 
 export type AppDispatch = typeof store.dispatch;

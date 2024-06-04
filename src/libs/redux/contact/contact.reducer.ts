@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addFriend_action, getFriends_action, searchFriends_action } from "./contract.action";
+import { addFriend_action, addReceivedFriendRequest_action, getFriends_action, searchFriends_action } from "./contract.action";
 import { IFriend } from "../../../interfaces/friend.interface";
-import { IUser } from "../../../interfaces/user.interface";
+import { IRecieveRequestAddFriend, IUser } from "../../../interfaces/user.interface";
 export interface ContactState {
     getFriends: {
         loading: boolean;
@@ -18,7 +18,14 @@ export interface ContactState {
     addFriend: {
         loading: boolean;
         error: string | null;
-    }
+    },
+    receiveRequestAddFriend: {
+        loading: boolean;
+        error: string | null;
+        data: IRecieveRequestAddFriend[];
+    },
+    receiveRequestAddFriendList: IRecieveRequestAddFriend[],
+    countReceiveRequestAddFriend: number;
 }
 const initialState: ContactState = {
     getFriends: {
@@ -36,7 +43,14 @@ const initialState: ContactState = {
     addFriend: {
         loading: false,
         error: null,
-    }
+    },
+    receiveRequestAddFriend: {
+        loading: false,
+        error: null,
+        data: [],
+    },
+    receiveRequestAddFriendList: [],
+    countReceiveRequestAddFriend: 0,
 }
 const contactSlice = createSlice({
     name: "contact",
@@ -95,6 +109,20 @@ const contactSlice = createSlice({
         builder.addCase(addFriend_action.rejected, (state, action) => {
             state.addFriend.loading = false;
             state.addFriend.error = action.payload as string;
+        });
+
+        // receive request add friend
+        builder.addCase(addReceivedFriendRequest_action.pending, (state) => {
+            if (!state.receiveRequestAddFriend) {
+                state.receiveRequestAddFriend = initialState.receiveRequestAddFriend;
+                state.receiveRequestAddFriendList = initialState.receiveRequestAddFriendList;
+            }
+        });
+        builder.addCase(addReceivedFriendRequest_action.fulfilled, (state, action) => {
+            state.receiveRequestAddFriend.loading = false;
+            state.receiveRequestAddFriend.error = null;
+            state.receiveRequestAddFriendList = state.receiveRequestAddFriendList.addUnique([action.payload], "id");
+            state.countReceiveRequestAddFriend = state.receiveRequestAddFriendList.filter(x => !x.isRead).length
         });
     },
 });
