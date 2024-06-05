@@ -7,6 +7,7 @@ import { clearGetMe_action, getMe_action } from '../../libs/redux/auth/auth.acti
 import { setToken } from '../../libs/axios';
 import { useLoading, useSignalR } from '../../hooks';
 import { SCREEN } from '../../constants/screen';
+import { getReceivedFriendRequest_action } from '../../libs/redux/contact/contract.action';
 
 interface IProps {
   navigation: any;
@@ -35,7 +36,18 @@ export default function WelCome({ navigation }: IProps): React.JSX.Element {
       }]);
     }
     if (authState.user) {
-      navigation.navigate(SCREEN.HOME_STACK)
+      (async () => {
+        Promise.all([
+          dispatch(getReceivedFriendRequest_action({
+            paginate: {
+              page: 1,
+              countPerPage: 10
+            }
+          }))
+        ])
+        navigation.navigate(SCREEN.HOME_STACK)
+      }
+      )();
     }
   }, [authState.getMe])
   return (

@@ -60,8 +60,7 @@ const screens: IScreen[] = [
     options: (({ route }: any) => {
       return ({
         title: route.params.title,
-        headerRight: route.params?.headerRight,
-        header: route.params?.header
+        headerRight: typeof route.params?.headerRight == 'function' ? route.params?.headerRight : false,
       })
     })
   },
@@ -75,7 +74,7 @@ const screens: IScreen[] = [
     name: SCREEN.RECEIVE_REQUEST_ADD_FRIEND_SCREEN,
     component: ReceiveRequestAddFriend,
     options: {
-      title: "Request"
+      title: "Requests"
     }
   }
 ];

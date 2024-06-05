@@ -11,13 +11,18 @@ const key = {
     searchFriends: "user/searchFriends",
     addFriend: "user/addFriend",
     receiveMakeFriendRequest: "user/receiveMakeFriendRequest",
-    getReceivedFriendRequest: "user/getReceivedFriendRequest"
+    getReceivedFriendRequest: "user/getReceivedFriendRequest",
+    acceptRequestMakeFriend: "user/acceptRequestMakeFriend",
+    rejectRequestMakeFriend: "user/rejectRequestMakeFriend",
+    removeReceivedMakeFriendRequest: "user/removeReceivedMakeFriendRequest",
 };
 const api = {
     friends: "user/friends",
     searchFriends: "user/search-friends",
     addFriend: "user/add-friend",
-    receiveMakeFriendRequest: "user/receive-make-friend-request",
+    receiveMakeFriendRequest: "user/receive-make-friend-requests",
+    rejectMakeFriendRequest: "user/reject-make-friend-request",
+    acceptRequestMakeFriend: "user/accept-request-make-friend",
 };
 
 interface IGetFriendsRequest {
@@ -102,7 +107,49 @@ const getReceivedFriendRequest_action = createAsyncThunk(
             const response = await http.get(api.receiveMakeFriendRequest, {
                 params: paginate
             });
-             return response.data as IPaginate<IRecieveRequestAddFriend>;
+            return response.data as IPaginate<IRecieveRequestAddFriend>;
+        } catch (error: any) {
+            return rejectWithValue(getMessageErrorFromApi(error));
+        }
+    }
+);
+
+interface IAcceptRequestMakeFriend {
+    userId: number;
+}
+const acceptRequestMakeFriend_action = createAsyncThunk(
+    key.acceptRequestMakeFriend,
+    async (data: IAcceptRequestMakeFriend, { rejectWithValue }) => {
+        try {
+            await http.post(api.acceptRequestMakeFriend, {
+                userId: data.userId
+            });
+            return;
+        } catch (error: any) {
+            return rejectWithValue(getMessageErrorFromApi(error));
+        }
+    }
+);
+
+const rejectRequestMakeFriend_action = createAsyncThunk(
+    key.rejectRequestMakeFriend,
+    async (data: IAcceptRequestMakeFriend, { rejectWithValue }) => {
+        try {
+            await http.post(api.rejectMakeFriendRequest, {
+                userId: data.userId
+            });
+            return;
+        } catch (error: any) {
+            return rejectWithValue(getMessageErrorFromApi(error));
+        }
+    }
+);
+
+const removeReceivedMakeFriendRequest_action = createAsyncThunk(
+    key.removeReceivedMakeFriendRequest,
+    async (id: number, { rejectWithValue }) => {
+        try {
+            return id;
         } catch (error: any) {
             return rejectWithValue(getMessageErrorFromApi(error));
         }
@@ -113,5 +160,9 @@ export {
     getFriends_action,
     searchFriends_action,
     addFriend_action,
-    addReceivedFriendRequest_action
+    addReceivedFriendRequest_action,
+    getReceivedFriendRequest_action,
+    acceptRequestMakeFriend_action,
+    rejectRequestMakeFriend_action,
+    removeReceivedMakeFriendRequest_action
 }

@@ -7,6 +7,7 @@ import { IMessages } from "../../interfaces/message.interface";
 import { Button, Text } from "../../components";
 import { style } from "./style";
 import { DISPLAY, TEXT } from "../../ styles";
+import { SCREEN } from "../../constants/screen";
 
 interface IItemProps {
   item: IMessages;
@@ -57,18 +58,14 @@ export default function Messages({ navigation }: IMessagesProps) {
       <FlatList
         keyExtractor={(item, index) => item.id.toString() + "-" + index.toString()}
         data={messageState?.messagesList || []}
-        renderItem={({ item }) => <Item item={item} onPress={() => navigation.navigate("Message", {
+        renderItem={({ item }) => <Item item={item} onPress={() => navigation.navigate(SCREEN.MESSAGE_SCREEN, {
           id: item.id,
           title: item.name,
           headerRight: () => {
             return <Button type="clear" icon={
               <Image
-                source={{ uri: item.avatar || "https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-1.2.1" }}
-                style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: 15
-                }}
+                source={{ uri: item.avatar }}
+                style={style.headerAvatar}
               />
             } onPress={() => { }} />
           },

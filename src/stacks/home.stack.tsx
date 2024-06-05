@@ -7,7 +7,8 @@ import MessageStack from "./messages.stack";
 import { Badge, Button, Icon } from "../components";
 import { Image } from "react-native-elements";
 import { View } from "react-native";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getReceivedFriendRequest_action } from "../libs/redux/contact/contract.action";
 const Tab = createBottomTabNavigator();
 interface IProps {
   navigation: Navigation
@@ -17,11 +18,20 @@ export default function HomeStack({ navigation }: IProps) {
   const contactState = useAppSelector(state => state.contact);
   const userState = useAppSelector(state => state.auth.user);
   const countReceiveRequestAddFriend = contactState?.countReceiveRequestAddFriend || 0;
+  const [page, setPage] = useState(1);
+  const fetchReceiveRequestAddFriend = async () => {
+    await dispatch(getReceivedFriendRequest_action({
+      paginate: {
+        page: page,
+        countPerPage: 10
+      }
+    }))
+  }
   useEffect(() => {
-    Promise.all([
-      
-    ])
-  }, [])
+    (async () => {
+      await fetchReceiveRequestAddFriend()
+    })()
+  }, [page])
   return (
     <Tab.Navigator initialRouteName="messageStack">
       <Tab.Screen name="contact" options={{

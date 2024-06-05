@@ -14,6 +14,6 @@ export interface IMessage {
 }
 
 export interface ISendMessageBody {
-    content: string,
-    to: number,
+    message : string,
+    messageGroupId : number
 }

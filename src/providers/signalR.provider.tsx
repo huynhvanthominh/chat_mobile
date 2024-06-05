@@ -14,7 +14,7 @@ const initialState: ISignalRContext = {
     stopConnection: () => { },
     on: () => { },
     off: () => { },
-    send: () => { }
+    send: () => { },
 };
 export const signalRContext = createContext(initialState);
 

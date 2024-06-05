@@ -1,4 +1,4 @@
-import { Alert, FlatList, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, TouchableOpacity, View } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../libs/redux/hooks";
 import { useLoading } from "../../hooks";
 import { useEffect, useState } from "react";
@@ -8,22 +8,9 @@ import "../../extensions/array.extensions";
 import { IFriend } from "../../interfaces/friend.interface";
 import { style } from "./style";
 import { SCREEN } from "../../constants/screen";
-interface IItem {
-  item: IFriend,
-  onPress: () => void
-}
-const Item = ({
-  item,
-  onPress
-}: IItem) => {
-  return (
-    <View>
-      <TouchableOpacity onPress={() => onPress && onPress()}>
-        <Text>Item</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
+import Item from "./item";
+import { SIZE } from "../../ styles";
+
 interface IProps {
   navigation: any
 }
@@ -36,12 +23,33 @@ export default function Friend({ navigation }: IProps) {
   const [page, setPage] = useState(1);
   const [countPerPage] = useState(10);
   const { setLoading } = useLoading();
+
+
+  const navigateToAddFriend = () => {
+    navigation.navigate(SCREEN.ADD_FRIEND_SCREEN);
+  }
+
+  const navigateToChat = (friend: IFriend) => {
+    navigation.navigate(SCREEN.MESSAGE_SCREEN, {
+      id: friend.messageGroupId,
+      title: friend.displayName || friend.username,
+      headerRight: () => {
+        return <Button type="clear" icon={
+          <Image
+            source={{ uri: friend.avatar }}
+            style={style.headerAvatar}
+          />
+        } onPress={() => { }} />
+      },
+    });
+  }
+
   useEffect(() => {
     setLoading(getFriendsState?.loading, "Loading friends...");
     setLoading(false);
   }, [getFriendsState]);
-  useEffect(() => {
 
+  useEffect(() => {
     dispatch(getFriends_action({
       paginate: {
         page,
@@ -49,9 +57,6 @@ export default function Friend({ navigation }: IProps) {
       }
     }));
   }, [page]);
-  const navigateToAddFriend = () => {
-    navigation.navigate(SCREEN.ADD_FRIEND_SCREEN);
-  }
   return (
     <View>
       {friends?.isEmpty() && (
@@ -68,15 +73,28 @@ export default function Friend({ navigation }: IProps) {
       )
       }
       <FlatList
+        style={[
+          SIZE.H_100
+        ]}
         data={friends}
-        renderItem={({ item }) => <Item item={item} onPress={() => {
-          Alert.alert("Item pressed");
-        }} />}
+        renderItem={({ item }) => (
+          <Item
+            onPress={() => navigateToChat(item)}
+            displayName={item.displayName}
+            avatar={item.avatar}
+            username={item.username}
+          />
+        )}
         keyExtractor={(item) => item.userId.toString()}
+        onEndReachedThreshold={0.1}
         onEndReached={() => {
-          Alert.alert("End reached");
           setPage(page + 1);
         }}
+        // ListFooterComponent={() => {
+        //   return (
+        //     getFriendsState?.loading ? <Button type="clear" loading={true} /> : null
+        //   )
+        // }}
       />
     </View>
   );

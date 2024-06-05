@@ -9,19 +9,11 @@ interface ItemProps {
     username: string;
     avatar: string;
     onPress: () => void;
-    onAccept: () => void;
-    onAcceptLoading: boolean;
-    onDecline: () => void;
-    onDeclineLoading: boolean;
 }
 export default function Item({
     displayName,
     username,
     avatar,
-    onAccept,
-    onAcceptLoading,
-    onDecline,
-    onDeclineLoading,
     onPress
 }: ItemProps) {
     return (
@@ -49,18 +41,6 @@ export default function Item({
                         <Text h5>{username}</Text>
                     </View>
                 </TouchableOpacity>
-                <View style={
-                    DISPLAY.flex_row
-                }>
-                    <Button type="clear" onPress={() => onAccept && onAccept()}
-                        icon={<Icon name='check' color={"green"} />}
-                        loading={onAcceptLoading}
-                    />
-                    <Space />
-                    <Button type="clear" onPress={onDecline}
-                        loading={onDeclineLoading}
-                        icon={<Icon name="xmark" color={"red"} />} />
-                </View>
             </View>
             <Space />
             <Border bottom />
